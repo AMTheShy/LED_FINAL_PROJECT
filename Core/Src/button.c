@@ -1,7 +1,7 @@
 #include "main.h"
-#include "systemEvent.h"
 #include "softwareTimer.h"
 #include "button.h"
+#include "eventQueue.h"
 
 
 
@@ -21,6 +21,38 @@ static uint8_t debounceDone;
 static uint8_t longClickFired;
 static uint8_t stuckCheckFired;
 
+static void Button_pushEvent(SystemEventType_t eventType) {
+
+	SystemEvent_t event = {
+
+		.type = eventType,
+
+		.fault = FAULT_NONE,
+
+		.source = FAULT_SOURCE_BUTTON
+
+	};
+
+	eventQueue_push(event);
+
+}
+
+static void Button_pushFault(FaultCode_t faultCode) {
+
+	SystemEvent_t fault = {
+
+		.type = SYSTEM_EVENT_FAULT_DETECTED,
+
+		.fault = faultCode,
+
+		.source = FAULT_SOURCE_BUTTON
+
+	};
+
+	eventQueue_push(faultEvent);
+}
+
+
 static uint8_t button_readRawInput() {
 
 	GPIO_PinState rawInput = HAL_GPIO_ReadPin(User_Button_GPIO_Port_Number, User_Button_GPIO_Pin_Number);
@@ -29,7 +61,7 @@ static uint8_t button_readRawInput() {
 
 }
 
-static void button_init() {
+void button_init() {
 
 	buttonStatus.rawPressed = button_readRawInput();
 
@@ -50,7 +82,7 @@ static void button_init() {
 	longClickFired = 0u;
 
 	stuckCheckFired = 0u;
-	
+
 	SoftwareTimer_Stop(&debounceTimer);
 	SoftwareTimer_Stop(&longPressTimer);
 	SoftwareTimer_Stop(&stuckTimer);
@@ -63,7 +95,7 @@ static void button_init() {
 
 	}
 
-}
+};
 
 static void button_debounce() {
 
@@ -98,7 +130,7 @@ static void button_debounce() {
 
 }
 
-static void button_update() {
+void button_update() {
 
 	button_debounce();
 

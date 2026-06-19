@@ -2,6 +2,7 @@
 #define BUTTON_H
 
 #include <stdint.h>
+#include "systemEvent.h"
 
 typedef struct {
 
@@ -19,8 +20,11 @@ typedef struct {
 
 }Button_Status_t;
 
-
+static void Button_pushEvent(SystemEventType_t eventType);
+static void Button_pushFault(FaultCode_t fault);
+static uint8_t button_readRawInput();
+static void Button_debounce();
 void Button_init();
 void Button_update();
-Button_Status Button_getStatus();
+Button_Status_t Button_getStatus();
 #endif 
