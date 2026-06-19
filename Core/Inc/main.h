@@ -72,6 +72,9 @@ void Error_Handler(void);
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
 
+#define User_Button_GPIO_Port_Number 123
+#define User_Button_GPIO_Pin_Number 123
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
